@@ -67,6 +67,13 @@ h2{font-size:clamp(1.6rem,4vw,2.2rem);text-align:center;margin-bottom:10px}
   color:var(--text);font:500 .88rem 'Inter',sans-serif;cursor:pointer;transition:.2s}
 .btns button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
 .btns button:disabled{opacity:.4;cursor:not-allowed}
+/* DATA TABLE */
+.table-wrap{max-height:540px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:18px}
+#places{width:100%;min-width:760px;border-collapse:collapse;font-size:.9rem}
+#places th,#places td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+#places th{position:sticky;top:0;background:var(--surface2);color:var(--accent);font-weight:600;white-space:nowrap}
+#places tbody tr:hover{background:rgba(227,169,160,.06)}
+#places td a{color:var(--accent);font-weight:500}
 /* FOOTER */
 footer{text-align:center;padding:80px 0 40px;border-top:1px solid var(--line);
   background:radial-gradient(circle at 50% 100%,rgba(227,169,160,.12),transparent 60%)}
@@ -84,7 +91,7 @@ footer p{color:var(--muted);max-width:520px;margin:0 auto 28px}
 <header class="hero">
   <div class="wrap">
     <div class="avatar"><img src="lova.png" alt="Lova" onerror="this.outerHTML='<span>L</span>'"></div>
-    <div class="badge"><span class="dot"></span>🟢 Status: Active &amp; Ready 24/7</div>
+    <div class="badge"><span class="dot"></span>Status: Active &amp; Ready 24/7</div>
     <h1>Halo, aku <em>Lova</em></h1>
     <p class="tagline">Asisten admin kelas training yang menyiapkan semuanya — dari jadwal, undangan, absensi, hingga laporan evaluasi pengajar — setelah kamu approve.</p>
   </div>
@@ -163,7 +170,23 @@ footer p{color:var(--muted);max-width:520px;margin:0 auto 28px}
   </div>
 </section>
 
-<!-- 5. FOOTER & CTA -->
+<!-- 5. DATA TEMPAT (SUPABASE) -->
+<section style="background:#10121c">
+  <div class="wrap">
+    <h2>Direktori Tempat</h2>
+    <p class="sub">Data live dari database Supabase, diurutkan berdasarkan jumlah review terbanyak.</p>
+    <div class="table-wrap">
+      <table id="places">
+        <thead>
+          <tr><th>Nama</th><th>Kategori</th><th>Rating</th><th>Review</th><th>Kota</th><th>Telepon</th><th>Maps</th></tr>
+        </thead>
+        <tbody><tr><td colspan="7">Memuat data...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 6. FOOTER & CTA -->
 <footer>
   <div class="wrap">
     <h2>Ada Pertanyaan Seputar Training?</h2>
@@ -230,6 +253,49 @@ async function play(i){
   }
   buttons.forEach(b => b.disabled = false);
 }
+</script>
+
+<script>
+  const SUPABASE_URL = 'https://ozpumqeznodskcymfget.supabase.co'; // WAJIB DIISI: Project URL Supabase, contoh https://xxxxx.supabase.co
+  const SUPABASE_KEY = 'sb_publishable_Zcsy65T1wU2eBnQMOh-i9A_gZpjmxXJ'; // publishable key, BUKAN secret key
+
+  async function loadPlaces() {
+    const tbody = document.querySelector('#places tbody');
+    try {
+      const res = await fetch(
+        SUPABASE_URL + '/rest/v1/places?select=*&order=reviews_count.desc.nullslast&limit=100',
+        { headers: { apikey: SUPABASE_KEY } }
+      );
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const rows = await res.json();
+
+      tbody.replaceChildren();
+      for (const p of rows) {
+        const tr = document.createElement('tr');
+        for (const v of [p.title, p.category_name, p.total_score, p.reviews_count, p.city, p.phone]) {
+          const td = document.createElement('td');
+          td.textContent = v ?? '-';
+          tr.appendChild(td);
+        }
+        const td = document.createElement('td');
+        if (p.url && p.url.startsWith('https://')) {
+          const a = document.createElement('a');
+          a.href = p.url;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          a.textContent = 'Buka';
+          td.appendChild(a);
+        }
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+      }
+      if (!rows.length) tbody.innerHTML = '<tr><td colspan="7">Belum ada data.</td></tr>';
+    } catch (e) {
+      tbody.innerHTML = '<tr><td colspan="7">Gagal memuat data.</td></tr>';
+      console.error(e);
+    }
+  }
+  loadPlaces();
 </script>
 </body>
 </html>
