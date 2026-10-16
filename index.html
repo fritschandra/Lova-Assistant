@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lova — Asisten Admin Kelas Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0f17;--surface:#151826;--surface2:#1c2033;--line:#2a2f45;
+  --text:#ecebf2;--muted:#9a9cb3;--accent:#e3a9a0;--accent2:#c98b9e;
+  --green:#3ddc84;--red:#ff6b6b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.6}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+section{padding:72px 0}
+h1,h2{font-family:'Playfair Display',serif;font-weight:600}
+h2{font-size:clamp(1.6rem,4vw,2.2rem);text-align:center;margin-bottom:10px}
+.sub{color:var(--muted);text-align:center;max-width:620px;margin:0 auto 40px}
+/* HERO */
+.hero{text-align:center;padding:96px 0 64px;background:radial-gradient(circle at 50% 0%,rgba(227,169,160,.14),transparent 60%)}
+.avatar{width:132px;height:132px;border-radius:50%;margin:0 auto 24px;position:relative;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));padding:3px;box-shadow:0 0 50px rgba(227,169,160,.35)}
+.avatar img,.avatar span{width:100%;height:100%;border-radius:50%;object-fit:cover;background:var(--surface);
+  display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:3.2rem;color:var(--accent)}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;font-size:.85rem;
+  background:rgba(61,220,132,.1);border:1px solid rgba(61,220,132,.4);color:var(--green);margin-bottom:20px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(61,220,132,.7)}70%{box-shadow:0 0 0 10px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
+.hero h1{font-size:clamp(2.6rem,7vw,4rem);margin-bottom:8px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.tagline{color:var(--muted);font-size:1.1rem;max-width:600px;margin:0 auto}
+/* PROBLEM vs SOLUTION */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.col{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px}
+.col h3{font-size:1.2rem;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.chaos{border-top:3px solid var(--red)}.solution{border-top:3px solid var(--green)}
+.col li{list-style:none;padding:12px 0;border-bottom:1px dashed var(--line);display:flex;gap:12px;color:#cfd0dc}
+.col li:last-child{border:none}
+/* CAPABILITIES */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:28px;transition:.25s}
+.card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;
+  background:linear-gradient(135deg,rgba(227,169,160,.18),rgba(201,139,158,.08));margin-bottom:16px}
+.card h4{font-size:1.1rem;margin-bottom:8px}.card p{color:var(--muted);font-size:.95rem}
+/* SIMULATION */
+.sim{max-width:680px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.sim-head{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--surface2);border-bottom:1px solid var(--line)}
+.mini{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;color:var(--bg);font-weight:600}
+.sim-head small{color:var(--green);display:block;font-size:.75rem}
+.chat{height:380px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:82%;padding:11px 15px;border-radius:16px;font-size:.92rem;animation:pop .3s ease;white-space:pre-line}
+.user{align-self:flex-end;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1a1420;border-bottom-right-radius:4px}
+.bot{align-self:flex-start;background:var(--surface2);border:1px solid var(--line);border-bottom-left-radius:4px}
+.approve{align-self:center;font-size:.8rem;color:var(--accent);border:1px dashed var(--accent);padding:6px 14px;border-radius:999px}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.typing{display:flex;gap:4px;padding:14px 16px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.placeholder{margin:auto;color:var(--muted);text-align:center;font-size:.9rem}
+.btns{display:flex;flex-wrap:wrap;gap:10px;padding:16px;border-top:1px solid var(--line);background:var(--surface2)}
+.btns button{flex:1 1 180px;padding:11px;border-radius:12px;border:1px solid var(--line);background:var(--surface);
+  color:var(--text);font:500 .88rem 'Inter',sans-serif;cursor:pointer;transition:.2s}
+.btns button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.btns button:disabled{opacity:.4;cursor:not-allowed}
+/* FOOTER */
+footer{text-align:center;padding:80px 0 40px;border-top:1px solid var(--line);
+  background:radial-gradient(circle at 50% 100%,rgba(227,169,160,.12),transparent 60%)}
+footer p{color:var(--muted);max-width:520px;margin:0 auto 28px}
+.cta{display:inline-flex;align-items:center;gap:10px;padding:16px 34px;border-radius:999px;text-decoration:none;font-weight:600;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1a1420;box-shadow:0 10px 30px rgba(227,169,160,.3);transition:.25s}
+.cta:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(227,169,160,.45)}
+.credit{margin-top:48px;font-size:.8rem;color:var(--muted);letter-spacing:.05em}
+@media(max-width:760px){.compare,.cards{grid-template-columns:1fr}section{padding:56px 0}.chat{height:340px}}
+</style>
+</head>
+<body>
+
+<!-- 1. HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="avatar"><img src="lova.png" alt="Lova" onerror="this.outerHTML='<span>L</span>'"></div>
+    <div class="badge"><span class="dot"></span>🟢 Status: Active &amp; Ready 24/7</div>
+    <h1>Halo, aku <em>Lova</em></h1>
+    <p class="tagline">Asisten admin kelas training yang menyiapkan semuanya — dari jadwal, undangan, absensi, hingga laporan evaluasi pengajar — setelah kamu approve.</p>
+  </div>
+</header>
+
+<!-- 2. PROBLEM & SOLUTION -->
+<section>
+  <div class="wrap">
+    <h2>Dari Kacau Jadi Tertata</h2>
+    <p class="sub">Administrasi training yang biasanya makan waktu berhari-hari, kini dikerjakan Lova secara rapi dan terukur.</p>
+    <div class="compare">
+      <div class="col chaos">
+        <h3>😵 The Chaos</h3>
+        <ul>
+          <li>❌ Jadwal kelas tidak bisa diisi pengajar karena bentrok dengan agenda lain.</li>
+          <li>❌ Peserta lupa sudah terjadwal training karena tidak ada reminder ke email.</li>
+          <li>❌ Peserta lupa absen dan lupa mengisi evaluasi pengajar.</li>
+          <li>❌ Laporan pelaksanaan training disusun manual dan sering terlambat.</li>
+        </ul>
+      </div>
+      <div class="col solution">
+        <h3>✨ The Solution</h3>
+        <ul>
+          <li>✅ Lova mengecek kalender pengajar &amp; ruangan, lalu mengusulkan slot tanpa bentrok.</li>
+          <li>✅ Undangan &amp; reminder otomatis via Gmail dan WhatsApp ke seluruh peserta.</li>
+          <li>✅ Link absen &amp; evaluasi (Level 1, NPS, 5 penilaian Likert pengajar) dikirim tepat waktu.</li>
+          <li>✅ Laporan lengkap pelaksanaan training &amp; penilaian pengajar tersusun otomatis.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. CORE CAPABILITIES -->
+<section style="background:#10121c">
+  <div class="wrap">
+    <h2>Kemampuan Utama Lova</h2>
+    <p class="sub">Terhubung dengan tools yang sudah kamu pakai setiap hari.</p>
+    <div class="cards">
+      <div class="card">
+        <div class="icon">📅</div>
+        <h4>Google Calendar</h4>
+        <p>Menyusun nama training, peserta, pengajar, hari, tanggal, jam, dan ruangan — sekaligus mendeteksi jadwal bentrok sebelum terjadi.</p>
+      </div>
+      <div class="card">
+        <div class="icon">✉️</div>
+        <h4>Gmail &amp; WhatsApp</h4>
+        <p>Mengirim undangan, reminder H-1, link absen peserta &amp; pengajar, serta kuesioner evaluasi agar tak ada yang terlewat.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🛡️</div>
+        <h4>Human-in-the-Loop</h4>
+        <p>Tidak ada yang dikirim sebelum admin memberi approval manual. Kamu tetap pegang kendali penuh atas setiap pelaksanaan training.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. INTERACTIVE SIMULATION -->
+<section>
+  <div class="wrap">
+    <h2>Coba Simulasi Lova</h2>
+    <p class="sub">Pilih skenario di bawah dan lihat bagaimana Lova bekerja.</p>
+    <div class="sim">
+      <div class="sim-head">
+        <div class="mini">L</div>
+        <div><strong>Lova</strong><small>● online — Asisten Admin Training</small></div>
+      </div>
+      <div class="chat" id="chat"><div class="placeholder">👇 Klik salah satu skenario untuk memulai</div></div>
+      <div class="btns">
+        <button onclick="play(0)">🗓️ Siapkan Kelas Baru</button>
+        <button onclick="play(1)">🔔 Reminder &amp; Absensi</button>
+        <button onclick="play(2)">📊 Evaluasi &amp; Laporan</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. FOOTER & CTA -->
+<footer>
+  <div class="wrap">
+    <h2>Ada Pertanyaan Seputar Training?</h2>
+    <p>Hubungi admin langsung via WhatsApp. Pertanyaan peserta akan dijawab secepatnya.</p>
+    <a class="cta" href="https://wa.me/628119521971" target="_blank" rel="noopener">💬 Chat Admin via WhatsApp</a>
+    <div class="credit">Built with AI · AI Builder Bootcamp Showcase</div>
+  </div>
+</footer>
+
+<script>
+const scenarios = [
+  [
+    {u:"Lova, siapkan kelas 'Manajemen Risiko Dasar' untuk 25 peserta minggu depan, pengajar Pak Budi."},
+    {b:"Siap! Aku cek kalender Pak Budi dan ketersediaan ruangan dulu ya... 🔍"},
+    {b:"Pak Budi bentrok di hari Selasa. Slot terbaik yang tersedia:\n📅 Kamis, 22 Oktober 2026\n🕘 09.00–16.00 WIB\n🏫 Ruang Training Lt. 3 (kapasitas 30)\n👥 25 peserta + 1 pengajar"},
+    {b:"Draft undangan sudah siap. Mohon approval sebelum aku kirim via Google Calendar, Gmail & WhatsApp 🙏"},
+    {a:"✅ Admin menyetujui pelaksanaan training"},
+    {b:"Terkirim! 26 undangan sudah masuk ke kalender, email, dan WhatsApp peserta serta pengajar ✨"}
+  ],
+  [
+    {u:"Lova, besok kelasnya mulai. Pastikan peserta ingat dan absen ya."},
+    {b:"Tentu! Aku siapkan reminder H-1 untuk 25 peserta & Pak Budi, berikut link absen digital untuk peserta dan pengajar 📋"},
+    {b:"Mohon approval untuk mengirim reminder via Gmail & WhatsApp."},
+    {a:"✅ Admin menyetujui pengiriman reminder"},
+    {b:"Reminder terkirim 🔔\nUpdate hari H pukul 10.00:\n✅ 22 peserta sudah absen\n⏳ 3 peserta belum — aku kirim pengingat personal via WhatsApp sekarang."}
+  ],
+  [
+    {u:"Kelas sudah selesai. Tolong kirim evaluasi dan siapkan laporannya."},
+    {b:"Siap! Kuesioner evaluasi sudah aku siapkan:\n1️⃣ Nama pengajar & nama training\n2️⃣ Penilaian Level 1 materi + NPS\n3️⃣ 5 penilaian pengajar (skala Likert 1–5)"},
+    {b:"Mohon approval untuk mengirim link evaluasi ke 25 peserta."},
+    {a:"✅ Admin menyetujui pengiriman evaluasi"},
+    {b:"📊 Laporan Pelaksanaan Training\nKehadiran: 25/25 (100%)\nEvaluasi terisi: 24/25\nRata-rata Level 1 materi: 4,6/5\nNPS: +62\nSkor Pak Budi: 4,7/5 ⭐\nLaporan lengkap sudah aku kirim ke email admin 📩"}
+  ]
+];
+
+const chat = document.getElementById('chat');
+const buttons = document.querySelectorAll('.btns button');
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+function add(cls, text){
+  const d = document.createElement('div');
+  d.className = 'msg ' + cls;
+  d.textContent = text;
+  chat.appendChild(d);
+  chat.scrollTop = chat.scrollHeight;
+  return d;
+}
+
+async function play(i){
+  buttons.forEach(b => b.disabled = true);
+  chat.innerHTML = '';
+  for (const step of scenarios[i]){
+    if (step.u){ add('user', step.u); await wait(700); }
+    else if (step.a){ add('approve', step.a); await wait(800); }
+    else {
+      const t = add('bot typing', '');
+      t.innerHTML = '<i></i><i></i><i></i>';
+      await wait(1300);
+      t.className = 'msg bot';
+      t.textContent = step.b;
+      chat.scrollTop = chat.scrollHeight;
+      await wait(600);
+    }
+  }
+  buttons.forEach(b => b.disabled = false);
+}
+</script>
+</body>
+</html>
